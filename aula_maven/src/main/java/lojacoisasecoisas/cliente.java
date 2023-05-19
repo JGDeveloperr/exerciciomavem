@@ -4,11 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class cliente {
-	 int id;
-	 String cpf;
+	 String  cpf;
 	 String nome;
 	 String email;
 
@@ -17,8 +15,8 @@ public class cliente {
 	
 	
 	
-	public void inserir(int id, String cpf, String nome, String email){
-		this.id = id;
+	public void inserir(String cpf, String nome, String email){
+		
 		this.cpf = cpf;
 		this.nome = nome;
 		this.email = email;
@@ -29,13 +27,13 @@ public class cliente {
 		
 		try {
 			
-			String sql = "insert into clientes(id, cpf_cnpj, nome, email)values(?,?,?,?)";
+			String sql = "insert into clientes(cpf_cnpj, nome, email)values(?,?,?)";
 			
 			PreparedStatement  ps = conexao.prepareStatement(sql);
-			ps.setInt(1, this.id);
-			ps.setString(2, this.cpf);
-			ps.setString(3, this.nome);
-			ps.setString(4, this.email);
+			
+			ps.setString(1, this.cpf);
+			ps.setString(2, this.nome);
+			ps.setString(3, this.email);
 			
 			ps.executeUpdate();
 			
@@ -65,10 +63,11 @@ public class cliente {
 			
 			
 			while(rs.next()) {
-				int id = rs.getInt("id");
+				String cpf = rs.getString("cpf_cnpj");
 				String nome = rs.getString("nome");
 				String email = rs.getString("email");
-				System.out.println(id + " " + nome + " " + email);
+				System.out.println("CPF: " +cpf + " \nNOME: " + nome + " \nEMAIL: " + email);
+				System.out.println();
 		}
 		
 		} catch (SQLException e) {
@@ -78,26 +77,25 @@ public class cliente {
 		
 	}
 
-	public void update(int id, String nome, String cpf, String email) {
+	public void update(String cpf, String nome, String email) {
 
-		this.id = id;
 		this.cpf = cpf;
 		this.nome = nome;
 		this.email = email;
 		
 		Connection conexao = bancodedados.getConexaoMySQL();
 	
-	
+		
 		try {
 		
-			String sql = "UPDATE clientes SET cpf_cnpj = ?, nome = ?, email = ? WHERE (id = ?)";
+			String sql = "UPDATE clientes SET nome = ?, email = ? WHERE (cpf_cnpj = ?)";
 		
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			
-			ps.setString(1, this.cpf);
-			ps.setString(2, this.nome);
-			ps.setString(3, this.email);
-			ps.setInt(4, this.id);
+			
+			ps.setString(1, this.nome);
+			ps.setString(2, this.email);
+			ps.setString(3, this.cpf);
 			
 			
 			int retorno = ps.executeUpdate();
